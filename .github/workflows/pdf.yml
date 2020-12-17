@@ -1,0 +1,24 @@
+name: Generate preview pdf
+on: push
+
+jobs:
+  build:
+    name: Generate pdf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: docker://vvakame/review:4.0
+      - run: ./build-in-docker.sh
+      - name: Get build date
+        id: get-date
+        run: echo "::set-output name=date::$(date +"%Y-%m-%d")"
+      - name: Get Repository Name
+        id: get-repo-name
+        run: echo "::set-output name=repo-name::${GITHUB_REPOSITORY##*/}"
+      - uses: actions/upload-artifact@master
+        with:
+          name: ${{ steps.get-repo-name.outputs.repo-name }}-${{ steps.get-date.outputs.date }}
+          # config.yml の bookname の値によって変える
+          path: articles/output.pdf
