@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - uses: docker://vvakame/review:4.0
+      - uses: docker://vvakame/review:5.0
       - run: ./build-in-docker.sh
       - name: Get build date
         id: get-date
